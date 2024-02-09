@@ -3,7 +3,7 @@ package tracing
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
-	"github.com/liuzhaomax/go-maxms/internal/core"
+	"github.com/liuzhaomax/maxblog-user/internal/core"
 	"github.com/uber/jaeger-client-go"
 	jConfig "github.com/uber/jaeger-client-go/config"
 	"io"
