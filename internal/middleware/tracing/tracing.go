@@ -1,6 +1,7 @@
 package tracing
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"github.com/liuzhaomax/maxblog-user/internal/core"
@@ -19,6 +20,11 @@ type Tracing struct {
 
 func (t *Tracing) Trace() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		fmt.Println("----------------")
+		fmt.Println(c.Get(core.Tracer))
+		fmt.Println("----------------")
+
 		tracer, closer, err := t.TracerConfig.NewTracer(jConfig.Logger(jaeger.StdLogger))
 		defer func(closer io.Closer) {
 			_ = closer.Close()
@@ -27,10 +33,10 @@ func (t *Tracing) Trace() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, t.GenErrMsg(c, "tracer生成失败", err))
 		}
 		span := tracer.StartSpan(c.Request.URL.Path)
+		defer span.Finish()
 		c.Set(core.Tracer, tracer)
 		c.Set(core.Parent, span)
 		c.Next()
-		span.Finish()
 	}
 }
 
