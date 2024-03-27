@@ -15,7 +15,7 @@ func Cors() gin.HandlerFunc {
 		ctx.Header("Access-Control-Allow-Headers", "Content-Type, AccessToken, X-CSRF-Token, Authorization, Token, Set-Cookie, X-Requested-With, Access-Control-Allow-Origin, Content-Security-Policy, Request_id, App_id")
 		ctx.Header("Access-Control-Allow-Methods", "POST, GET, PUT, PATCH, DELETE, OPTIONS")
 		ctx.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
-		ctx.Header("Access-Control-Allow-Credentials", "true")
+		// ctx.Header("Access-Control-Allow-Credentials", "true") // 如果设置会报错“设置了true, true”
 		// let go all options request
 		method := ctx.Request.Method
 		if method == "OPTIONS" {
