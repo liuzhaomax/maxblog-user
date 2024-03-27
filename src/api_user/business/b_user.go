@@ -27,6 +27,9 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (string, error) {
 	}
 	decryptedUsername, err := core.RSADecrypt(core.GetPrivateKey(), loginReq.Username)
 	loginReq.Username = decryptedUsername
+	if err != nil {
+		return core.EmptyString, core.FormatError(core.PermissionDenied, "请求体解码异常", err)
+	}
 	decryptedPassword, err := core.RSADecrypt(core.GetPrivateKey(), loginReq.Password)
 	loginReq.Password = decryptedPassword
 	if err != nil {
