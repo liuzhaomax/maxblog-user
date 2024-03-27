@@ -55,6 +55,12 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (string, error) {
 	if err != nil {
 		return core.EmptyString, core.FormatError(core.PermissionDenied, "Token生成失败", err)
 	}
+	bearerToken := core.Bearer + token
+	// 对Bearer jwt 进行RSA加密
+	encryptedBearerToken, err := core.RSAEncrypt(core.GetPublicKey(), bearerToken)
+	if err != nil {
+		return core.EmptyString, core.FormatError(core.PermissionDenied, "Token加密失败", err)
+	}
 	// 将userID设置到cookie中
 	maxAge := int(duration)
 	domain := core.GetConfig().App.Domain
@@ -66,7 +72,7 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (string, error) {
 		domain,
 		true,
 		true)
-	return core.Bearer + token, nil
+	return encryptedBearerToken, nil
 }
 
 func (b *BusinessUser) DeleteLogin(c *gin.Context) error {
