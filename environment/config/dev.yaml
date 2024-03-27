@@ -1,7 +1,7 @@
 app:
   name: maxblog-user
   version: 0.1
-  domain: 127.0.0.1
+  domain: localhost
   enabled:
     rsa: false # rsa和vault有关联关系
     vault: true
@@ -11,7 +11,7 @@ app:
   white_list:
     -
       name: frontend
-      domain: http://127.0.0.1:9100
+      domain: http://localhost:9100
 
 lib:
   log:
