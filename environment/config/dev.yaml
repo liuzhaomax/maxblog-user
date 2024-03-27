@@ -1,7 +1,7 @@
 app:
   name: maxblog-user
   version: 0.1
-  domain: liuzhaomax.cn
+  domain: 127.0.0.1
   enabled:
     rsa: false # rsa和vault有关联关系
     vault: true

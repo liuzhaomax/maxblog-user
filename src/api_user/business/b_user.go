@@ -48,9 +48,11 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (string, error) {
 	if !result {
 		return core.EmptyString, core.FormatError(core.PermissionDenied, "登录验证失败", err)
 	}
+	// 定义过期时长
+	maxAge := 60 * 60 * 24 * 7 // 一周
+	duration := time.Second * time.Duration(maxAge)
 	// 生成Bearer jwt，使用userID与ip签发
 	j := core.NewJWT()
-	duration := time.Second * 60 * 60 * 24 * 7 // 一周
 	token, err := j.GenerateToken(user.UserID, core.GetClientIP(c), duration)
 	if err != nil {
 		return core.EmptyString, core.FormatError(core.PermissionDenied, "Token生成失败", err)
@@ -62,15 +64,19 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (string, error) {
 		return core.EmptyString, core.FormatError(core.PermissionDenied, "Token加密失败", err)
 	}
 	// 将userID设置到cookie中
-	maxAge := int(duration)
 	domain := core.GetConfig().App.Domain
+	var secure bool
+	cfg := core.GetConfig()
+	if cfg.Server.Protocol == "https" {
+		secure = true
+	}
 	c.SetCookie(
 		core.UserID,
 		user.UserID,
 		maxAge,
 		"/",
 		domain,
-		true,
+		secure,
 		true)
 	return encryptedBearerToken, nil
 }
