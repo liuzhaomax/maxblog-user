@@ -25,6 +25,13 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (string, error) {
 	if err != nil {
 		return core.EmptyString, core.FormatError(core.ParseIssue, "请求体无效", err)
 	}
+	decryptedUsername, err := core.RSADecrypt(core.GetPrivateKey(), loginReq.Username)
+	loginReq.Username = decryptedUsername
+	decryptedPassword, err := core.RSADecrypt(core.GetPrivateKey(), loginReq.Password)
+	loginReq.Password = decryptedPassword
+	if err != nil {
+		return core.EmptyString, core.FormatError(core.PermissionDenied, "请求体解码异常", err)
+	}
 	user := &model.User{}
 	err = b.Tx.ExecTrans(c, func(ctx context.Context) error {
 		err = b.Model.QueryUserByUsername(c, loginReq.Username, user)
