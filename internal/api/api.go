@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"github.com/liuzhaomax/maxblog-user/internal/middleware"
-	"github.com/liuzhaomax/maxblog-user/internal/middleware/cors"
 	"github.com/liuzhaomax/maxblog-user/src/api_user/handler"
 	"github.com/liuzhaomax/maxblog-user/src/router"
 	"github.com/prometheus/client_golang/prometheus"
@@ -27,8 +26,6 @@ type Handler struct {
 func (h *Handler) Register(app *gin.Engine) {
 	// 404
 	app.NoRoute(h.GetNoRoute)
-	// CORS
-	app.Use(cors.Cors())
 	// consul
 	app.GET("/health", h.HealthHandler)
 	// prometheus
