@@ -44,5 +44,5 @@ func (h *HandlerUser) GetUserByUserID(c *gin.Context) {
 		h.Res.ResFailure(c, 500, core.Unknown, "查询失败", err)
 		return
 	}
-	h.Res.ResSuccess(c, user)
+	h.Res.ResSuccess(c, *user)
 }
