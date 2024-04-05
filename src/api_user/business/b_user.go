@@ -27,15 +27,15 @@ func (b *BusinessUser) PostLogin(c *gin.Context) (*schema.TokenRes, error) {
 		return res, core.FormatError(core.ParseIssue, "请求体无效", err)
 	}
 	decryptedUsername, err := core.RSADecrypt(core.GetPrivateKey(), loginReq.Username)
-	loginReq.Username = decryptedUsername
 	if err != nil {
 		return res, core.FormatError(core.PermissionDenied, "请求体解码异常", err)
 	}
 	decryptedPassword, err := core.RSADecrypt(core.GetPrivateKey(), loginReq.Password)
-	loginReq.Password = decryptedPassword
 	if err != nil {
 		return res, core.FormatError(core.PermissionDenied, "请求体解码异常", err)
 	}
+	loginReq.Username = decryptedUsername
+	loginReq.Password = decryptedPassword
 	user := &model.User{}
 	err = b.Tx.ExecTrans(c, func(ctx context.Context) error {
 		err = b.Model.QueryUserByUsername(c, loginReq.Username, user)
