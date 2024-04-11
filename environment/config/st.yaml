@@ -11,7 +11,7 @@ app:
   white_list:
     -
       name: sgw
-      domain: http://localhost:9999
+      domain: http://172.16.96.98:9999
 
 lib:
   log:
