@@ -1,9 +1,11 @@
 .idea
 .vscode
 
-log
-unit_test
-bin
+/www/
+
+/log/
+/unit_test/
+/bin/
 
 # Binaries for programs and plugins
 *.exe
