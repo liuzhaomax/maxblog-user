@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+	"github.com/liuzhaomax/maxblog-user/internal/core"
 	"github.com/liuzhaomax/maxblog-user/internal/middleware"
 	"github.com/liuzhaomax/maxblog-user/src/api_user/handler"
 	"github.com/liuzhaomax/maxblog-user/src/router"
@@ -34,6 +35,8 @@ func (h *Handler) Register(app *gin.Engine) {
 	app.Use(h.Middleware.Tracing.Trace())
 	// root route
 	root := app.Group("")
+	// 日志
+	app.Use(core.LoggerForHTTP())
 	{
 		// interceptor
 		root.Use(h.Middleware.Validator.ValidateHeaders())
